@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="hero-section position-relative text-white text-center d-flex align-items-center justify-content-center mb-5" style="background: url('/media/car_images/hero-car.jpg') center/cover no-repeat; min-height: 80vh;">
+  <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+
+  <div class="container position-relative z-2">
+    <h1 class="display-3 fw-bold">Find Your Perfect Ride</h1>
+    <p class="lead">Whether brand new or pre-loved, we've got your next car waiting.</p>
+    <a href="#" class="btn btn-primary btn-lg mt-3">Browse Cars</a>
+  </div>
+</section>
+
+
+
+
+<!-- How It Works -->
+<section class="how-it-works py-5 bg-light mb-5">
+  <div class="container">
+    <h2 class="text-center mb-4">How It Works</h2>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="bi bi-upload fs-1 text-primary"></i>
+        <h5>List Your Car</h5>
+        <p>Post your vehicle with photos, price, and description in minutes.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-search fs-1 text-primary"></i>
+        <h5>Find Cars</h5>
+        <p>Browse listings and filter by make, model, price, and location.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-telephone fs-1 text-primary"></i>
+        <h5>Contact Seller</h5>
+        <p>Call or message sellers directly to seal the deal fast and easy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <h2>Find Your Car</h2>
+  <div id="car-filter-root"></div>
+</section>
+
+
+<!-- Featured Listings Section -->
+<section class="py-5 bg-light mb-5">
+  <div class="container">
+
+    <h2 class="text-center mb-4">Featured Listings</h2>
+
+    <div class="position-relative">
+      <!-- Scrollable Container -->
+      <div id="scrollContainer" class="d-flex overflow-auto flex-nowrap px-2 mb-5" style="scroll-behavior: smooth; scroll-snap-type: x mandatory;">
+        {% for car in featured_cars %}
+        <div class="card bg-secondary text-white mx-2 shadow-sm border-0" style="width: 600px; scroll-snap-align: start; min-width: 200px;">
+          <div class="position-relative">
+            <!-- Car Image with Dark Overlay -->
+            <img src="{{ car.image.url }}" class="card-img-top" style="height: 180px; object-fit: cover;" alt="{{ car.make }} {{ car.model }}">
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.4); z-index: 1;"></div>
+
+            <!-- Ribbon -->
+            <span class="position-absolute top-0 start-0 bg-warning text-dark px-2 py-1 small fw-bold" style="border-bottom-right-radius: 5px; z-index: 2;">
+              {% if car.year >= 2024 %}NEW
+              {% elif car.featured %}HOT
+              {% else %}USED{% endif %}
+            </span>
+          </div>
+
+          <div class="card-body text-center position-relative" style="z-index: 2;">
+            <h5 class="card-title">{{ car.make }} {{ car.title }}</h5>
+            <p class="card-text">Ksh {{ car.price }}</p>
+            <a href="{% url 'cars:car_detail' car.slug %}" class="btn btn-light">View Details</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- View All Listings -->
+    <div class="text-center mt-4">
+      <a href="#" class="btn btn-warning text-dark px-4 fw-bold">View All Listings</a>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- Search by Brand -->
+<section class="container my-5">
+  <h3 class="text-center mb-4">Search by Brand</h3>
+
+  <div class="d-flex flex-wrap justify-content-center gap-4" id="brand-section">
+    {% for brand in brands %}
+      <a href="{% url 'cars:brand_cars' brand.slug %}" class="text-decoration-none brand-item {% if forloop.counter > 10 %}d-none extra-brand{% endif %}">
+        <div class="text-center">
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="rounded shadow"
+               width="80" height="80" style="object-fit: contain;">
+          <p class="text-white mt-2 small">{{ brand.name }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if brands|length > 10 %}
+    <div class="text-center mt-3">
+      <div id="brand-toggle-button"></div> <!-- React mounts the button here -->
+    </div>
+  {% endif %}
+</section>
+
+
+
+
+<!-- Call to Action -->
+<section class="cta text-white text-center py-5 mb-5" style="background: linear-gradient(120deg, #004aad, #003366);">
+  <div class="container">
+    <h2 class="fw-bold">Ready to Sell Your Car?</h2>
+    <p class="lead">Join hundreds of happy sellers. List your car for free today.</p>
+    <a href="#" class="btn btn-light px-4 py-2">Get Started</a>
+  </div>
+</section>
+
+<section class="new-cars py-5 mb-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Brand New Cars</h2>
+    <div class="row">
+      {% for car in new_cars %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <!-- Consistent image height -->
+            <img src="{{ car.image.url }}" 
+                 class="card-img-top" 
+                 alt="{{ car.make }}"
+                 style="height: 250px; object-fit: cover;">
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
+              <p class="card-text fw-bold text-primary">Ksh {{ car.price }}</p>
+              <div class="mt-auto">
+                <span class="badge bg-success">New</span>
+                <a href="{% url 'cars:car_detail' car.slug %}" class="btn btn-outline-primary btn-sm ms-2">
+                  Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+</section>
+
+
+
+
+
+
+
+{% endblock %}

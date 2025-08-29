@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <!-- All Cars -->
+  <h2 class="text-center mb-4">Explore All Cars</h2>
+  <div class="row g-4">
+    {% for car in cars %}
+      <div class="col-md-4 col-lg-3">
+        <div class="card shadow-sm border-0 h-100 car-card">
+          
+          <!-- Image links to detail -->
+          <a href="{% url 'cars:car_detail' car.slug %}">
+            <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.title }}">
+          </a>
+
+          <div class="card-body">
+            <!-- Title links to detail -->
+            <h5 class="card-title">
+              <a href="{% url 'cars:car_detail' car.slug %}" 
+                 class="text-decoration-none text-dark">
+                {{ car.brand }} {{ car.model }}
+              </a>
+            </h5>
+
+            <p class="card-text text-muted">
+              {{ car.year }} • {{ car.fuel_type }} • {{ car.mileage }} km
+            </p>
+            <span class="badge bg-primary">ksh{{ car.price|floatformat:0 }}</span>
+
+            <!-- Compare button -->
+            <form method="post" action="{% url 'cars:add_to_compare' car.slug %}" class="mt-2">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-primary btn-sm">+ Compare</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center">No cars available right now.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Brands -->
+  <div class="text-center mt-5">
+    <h1 class="mb-4">Our Brands</h1>
+  </div>
+  <div class="brand-logos d-flex justify-content-center flex-wrap gap-4 mb-5">
+    {% for brand in brands %}
+      <a href="{% url 'cars:brand_cars' brand.slug %}" class="text-center text-decoration-none">
+        <div class="logo-circle shadow-sm">
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+        </div>
+        <small class="d-block mt-2 text-muted">{{ brand.name }}</small>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .logo-circle {
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .logo-circle img {
+    max-width: 50px;
+    max-height: 50px;
+    object-fit: contain;
+  }
+  .logo-circle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  }
+  .car-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .car-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+  .car-card img {
+    height: 200px;
+    object-fit: cover;
+  }
+</style>
+{% endblock %}

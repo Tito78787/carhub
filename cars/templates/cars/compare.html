@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center mb-5">Compare Cars</h2>
+
+  {% if cars %}
+    <div class="row g-4 justify-content-center">
+      {% for car in cars %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100 compare-card">
+            
+            <!-- Car Image -->
+            <a href="{% url 'cars:car_detail' car.slug %}">
+              <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.title }}">
+            </a>
+
+            <!-- Car Info -->
+            <div class="card-body text-center">
+              <h5 class="card-title">
+                <a href="{% url 'cars:car_detail' car.slug %}" class="text-decoration-none text-dark">
+                  {{ car.brand }} {{ car.model }}
+                </a>
+              </h5>
+              <span class="badge bg-primary mb-2">${{ car.price|floatformat:0 }}</span>
+
+              <ul class="list-unstyled text-muted small">
+                <li><strong>Year:</strong> {{ car.year }}</li>
+                <li><strong>Fuel:</strong> {{ car.fuel_type }}</li>
+                <li><strong>Mileage:</strong> {{ car.mileage }} km</li>
+                <li><strong>Transmission:</strong> {{ car.transmission }}</li>
+                <li><strong>Engine:</strong> {{ car.engine_size }}L</li>
+              </ul>
+
+              <!-- Remove button -->
+              <form method="post" action="{% url 'cars:remove_from_compare' car.slug %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Clear All -->
+    <div class="text-center mt-4">
+      <form method="post" action="{% url 'cars:clear_compare' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Clear All</button>
+      </form>
+    </div>
+
+  {% else %}
+    <p class="text-center text-muted">No cars selected for comparison yet.</p>
+  {% endif %}
+</div>
+
+<style>
+  .compare-card {
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .compare-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .compare-card img {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  ul {
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+  ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid #f1f1f1;
+  }
+  ul li:last-child {
+    border-bottom: none;
+  }
+</style>
+{% endblock %}
