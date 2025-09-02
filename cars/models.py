@@ -37,6 +37,8 @@ class Car(models.Model):
     mileage = models.PositiveIntegerField(default=0)
     posted_on = models.DateTimeField(default=timezone.now)
     is_featured = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"
 

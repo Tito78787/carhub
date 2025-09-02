@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-from .views import home,add_to_compare,compare_view
+from .views import home,add_to_compare,compare_view,sell_car,remove_from_compare,clear_compare
 from users.views import login_user, RegisterView
 from cars.views import CarListAPIView
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path('compare/', views.compare_view, name='compare_view'),
     path("compare/remove/<slug:slug>/", views.remove_from_compare, name="remove_from_compare"),
     path("compare/clear/", views.clear_compare, name="clear_compare"),
+    path("sell/", views.sell_car, name="sell_car"),
 ]
 
 

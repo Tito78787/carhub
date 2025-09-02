@@ -73,7 +73,7 @@
   <ul class="dropdown-menu" aria-labelledby="listingDropdown">
     <li><a class="dropdown-item" href="{% url 'cars:car_list' %}">All Cars</a></li>
     <li><a class="dropdown-item" href="">By Brand</a></li>
-    <li><a class="dropdown-item" href="">Sell Your Car</a></li>
+    <li><a class="dropdown-item" href="{% url 'cars:sell_car' %}">Sell Your Car</a></li>
   </ul>
 </li>
 
@@ -84,7 +84,7 @@
           <a class="nav-link text-white" href="#">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#">Sell Your Car</a>
+          <a class="nav-link text-white" href="{% url 'cars:sell_car' %}">Sell Your Car</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white" href="#">Profile</a>
