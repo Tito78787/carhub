@@ -8,11 +8,14 @@ from .manager import CustomUserManager
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True)
+    last_name = models.CharField(_("last name"), max_length=30, blank=True)
+    is_superuser = models.BooleanField(default=False)
+
+    # Additional fields
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    first_name = models.CharField(max_length=30, blank=True)  
-    last_name = models.CharField(max_length=30, blank=True) 
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]

@@ -19,6 +19,8 @@ urlpatterns = [
     path("compare/remove/<slug:slug>/", views.remove_from_compare, name="remove_from_compare"),
     path("compare/clear/", views.clear_compare, name="clear_compare"),
     path("sell/", views.sell_car, name="sell_car"),
+    path("brands/", views.brand_list, name="brand_list"),
+
 ]
 
 

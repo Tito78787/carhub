@@ -6,10 +6,7 @@
   <title>{% block title %}CarHub{% endblock %}</title>
 
   <!-- Bootstrap CDN -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"rel="stylesheet">
-    <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -66,17 +63,16 @@
         <li class="nav-item">
           <a class="nav-link text-white" href="{% url 'cars:home' %}">Home</a>
         </li>
-       <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle text-white" href="#" id="listingDropdown" role="button" data-bs-toggle="dropdown">
-    Listings
-  </a>
-  <ul class="dropdown-menu" aria-labelledby="listingDropdown">
-    <li><a class="dropdown-item" href="{% url 'cars:car_list' %}">All Cars</a></li>
-    <li><a class="dropdown-item" href="">By Brand</a></li>
-    <li><a class="dropdown-item" href="{% url 'cars:sell_car' %}">Sell Your Car</a></li>
-  </ul>
-</li>
-
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="listingDropdown" role="button" data-bs-toggle="dropdown">
+            Listings
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="listingDropdown">
+            <li><a class="dropdown-item" href="{% url 'cars:car_list' %}">All Cars</a></li>
+            <li><a class="dropdown-item" href="{% url 'cars:brand_list' %}">By Brand</a></li>
+            <li><a class="dropdown-item" href="{% url 'cars:sell_car' %}">Sell Your Car</a></li>
+          </ul>
+        </li>
         <li class="nav-item">
           <a class="nav-link text-white" href="#">About Us</a>
         </li>
@@ -96,9 +92,16 @@
           <a class="nav-link text-white" href="#">Dashboard</a>
         </li>
         <li class="nav-item">
-   <div id="login-modal-root"><button class="btn btn-outline-light bg-dark text-white px-4 py-2">
-  Login / Register
-</button></div>
+          {% if user.is_authenticated %}
+            <span class="nav-link text-white">Welcome, {{ user.get_first_name }}</span>
+          {% else %}
+            <div id="login-modal-root">
+              <button class="btn btn-outline-light bg-dark text-white px-4 py-2">
+                Login / Register
+              </button>
+            </div>
+          {% endif %}
+        </li>
       </ul>
     </div>
   </div>
@@ -106,16 +109,13 @@
 
 <main class="container mt-4">
   {% block content %}
-
   {% endblock %}
 </main>
-
 
 {% block footer %}
 <footer class="bg-dark text-light pt-5 pb-3 mt-5">
   <div class="container">
     <div class="row">
-
       <!-- Logo / About -->
       <div class="col-md-4 mb-4">
         <h5 class="text-uppercase">CarHub</h5>
@@ -155,7 +155,6 @@
           </div>
         </form>
       </div>
-
     </div>
 
     <!-- Divider -->
@@ -168,6 +167,7 @@
   </div>
 </footer>
 {% endblock %}
+
 <!-- Bootstrap JS (for responsive navbar toggling) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>

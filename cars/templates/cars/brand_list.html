@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 fw-bold text-center">Browse by Brand</h2>
+
+  {% for brand in brands %}
+    <div class="mb-5">
+      <!-- Brand Title -->
+      <h3 class="mb-3 border-bottom pb-2">{{ brand.name }}</h3>
+
+      <div class="row g-4">
+        {% for car in brand.cars.all %}
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0"
+                 style="transition: transform 0.3s, box-shadow 0.3s"
+                 onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'"
+                 onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'">
+              <div style="height: 220px; overflow: hidden;">
+                <img src="{{ car.image.url }}" class="card-img-top h-100 w-100"
+                     style="object-fit: cover; transition: transform 0.4s ease;"
+                     onmouseover="this.style.transform='scale(1.05)'"
+                     onmouseout="this.style.transform='scale(1)'"
+                     alt="{{ car.make }}">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title mb-1">{{ car.make }} {{ car.model }}</h5>
+                <p class="card-text text-muted">Ksh {{ car.price }}</p>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12">
+            <div class="alert alert-light border text-muted">
+              No cars available for <strong>{{ brand.name }}</strong> yet.
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-warning">No brands found.</div>
+  {% endfor %}
+</div>
+{% endblock %}

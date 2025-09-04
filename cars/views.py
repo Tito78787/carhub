@@ -157,3 +157,9 @@ def sell_car(request):
         form = CarForm()
 
     return render(request, "cars/sell_car.html", {"form": form})
+
+
+def brand_list(request):
+    brands = Brand.objects.prefetch_related("cars").all()  
+    # prefetch_related avoids extra queries
+    return render(request, "cars/brand_list.html", {"brands": brands})

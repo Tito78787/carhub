@@ -15,25 +15,47 @@
             <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.title }}">
           </a>
 
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <!-- Title links to detail -->
-            <h5 class="card-title">
+            <h6 class="fw-bold text-danger mb-1">
               <a href="{% url 'cars:car_detail' car.slug %}" 
                  class="text-decoration-none text-dark">
                 {{ car.brand }} {{ car.model }}
               </a>
-            </h5>
-
-            <p class="card-text text-muted">
-              {{ car.year }} • {{ car.fuel_type }} • {{ car.mileage }} km
+            </h6>
+            <p class="text-muted small mb-2">
+              {{ car.year }} • {{ car.engine_size }} {{ car.transmission }}
             </p>
-            <span class="badge bg-primary">ksh{{ car.price|floatformat:0 }}</span>
 
-            <!-- Compare button -->
-            <form method="post" action="{% url 'cars:add_to_compare' car.slug %}" class="mt-2">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-outline-primary btn-sm">+ Compare</button>
-            </form>
+            <!-- Specs -->
+            <ul class="list-unstyled small mb-3">
+              <li><i class="bi bi-fuel-pump"></i> {{ car.fuel_type }}</li>
+              <li><i class="bi bi-speedometer2"></i> {{ car.mileage }} km</li>
+              <li><i class="bi bi-credit-card-2-back"></i> License included</li>
+              <li><i class="bi bi-truck"></i> Import approved</li>
+            </ul>
+
+            <!-- Price + Compare button -->
+            <div class="mt-auto">
+              {% if car.price %}
+                <p class="fw-bold text-danger mb-2">
+                  Ksh {{ car.price|floatformat:0 }}
+                </p>
+              {% else %}
+                <p class="fw-bold text-danger mb-2">Price on request</p>
+              {% endif %}
+
+              <div class="d-flex justify-content-between">
+                <a href="{% url 'cars:car_detail' car.slug %}" 
+                   class="btn btn-danger btn-sm rounded-pill">
+                   View
+                </a>
+                <form method="post" action="{% url 'cars:add_to_compare' car.slug %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-primary btn-sm">+ Compare</button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
